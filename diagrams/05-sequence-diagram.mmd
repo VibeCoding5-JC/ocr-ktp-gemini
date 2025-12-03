@@ -1,0 +1,41 @@
+sequenceDiagram
+    participant U as 👤 User
+    participant F as 🌐 Frontend
+    participant B as ⚙️ Backend
+    participant G as 🤖 Gemini API
+    
+    U->>F: Upload Foto KTP
+    F->>F: Validasi Format & Ukuran
+    
+    alt File Invalid
+        F-->>U: ❌ Error Popup
+    else File Valid
+        F->>F: Tampilkan Preview
+        U->>F: Klik Ekstrak Data
+        F->>F: Tampilkan Loading
+        F->>B: POST /api/extract-ktp
+        
+        B->>B: Validasi File
+        B->>B: Process Image
+        B->>G: Kirim Gambar + Prompt
+        
+        G->>G: Analisis Gambar
+        
+        alt Bukan KTP
+            G-->>B: is_ktp false
+            B-->>F: success false
+            F-->>U: ❌ Error Bukan KTP
+        else KTP Valid
+            G-->>B: is_ktp true + data
+            B-->>F: success true + data
+            F-->>U: ✅ Tampilkan Hasil
+        end
+    end
+    
+    opt User Actions
+        U->>F: Klik Salin JSON
+        F-->>U: ✅ JSON Copied
+        
+        U->>F: Klik Download
+        F-->>U: 💾 Download File
+    end

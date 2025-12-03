@@ -1,0 +1,31 @@
+flowchart TB
+    subgraph Frontend["🌐 Frontend - public/index.html"]
+        UI[Tailwind CSS UI]
+        DropZone[Drop Zone Component]
+        Preview[Image Preview]
+        Results[Results Display]
+        Modal[Error Modal Popup]
+    end
+    
+    subgraph Backend["⚙️ Backend - Node.js + Express"]
+        Routes[ktpRoutes.js]
+        Middleware[upload.js - Multer]
+        Service[geminiService.js]
+        Utils[imageUtils.js - Sharp]
+    end
+    
+    subgraph External["☁️ External"]
+        Gemini[Google Gemini 2.0 Flash API]
+    end
+    
+    UI --> DropZone
+    DropZone --> Preview
+    Preview --> Routes
+    Routes --> Middleware
+    Middleware --> Utils
+    Utils --> Service
+    Service --> Gemini
+    Gemini --> Service
+    Service --> Routes
+    Routes --> Results
+    Routes --> Modal

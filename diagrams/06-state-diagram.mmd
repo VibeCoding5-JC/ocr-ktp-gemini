@@ -1,0 +1,23 @@
+stateDiagram-v2
+    [*] --> Idle: Buka Aplikasi
+    
+    Idle --> FileSelected: Upload Gambar
+    FileSelected --> Idle: Reset
+    FileSelected --> Validating: Validasi File
+    
+    Validating --> Error: File Invalid
+    Validating --> Preview: File Valid
+    
+    Error --> Idle: Tutup Popup
+    
+    Preview --> Processing: Klik Ekstrak
+    Preview --> Idle: Reset
+    
+    Processing --> Error: API Error
+    Processing --> NotKTP: Bukan KTP
+    Processing --> Success: Ekstraksi Berhasil
+    
+    NotKTP --> Idle: Tutup Popup
+    
+    Success --> Success: Copy/Download
+    Success --> Idle: Reset/Upload Baru

@@ -1,0 +1,35 @@
+flowchart TD
+    subgraph Upload["📤 Upload Section"]
+        A[Drop Zone] --> B{Drag & Drop?}
+        B -->|Ya| C[Handle Drop Event]
+        B -->|Tidak| D[Klik untuk Browse]
+        D --> E[File Input Dialog]
+        C --> F[Get File]
+        E --> F
+    end
+    
+    subgraph Validate["✅ Validation"]
+        F --> G{Image File?}
+        G -->|Tidak| H[Show Error Popup]
+        G -->|Ya| I{Size OK?}
+        I -->|Tidak| H
+        I -->|Ya| J[Show Preview]
+    end
+    
+    subgraph Process["⚙️ Processing"]
+        J --> K[Enable Extract Button]
+        K --> L{Klik Extract?}
+        L -->|Ya| M[Show Loading]
+        M --> N[POST to API]
+        N --> O{Success?}
+        O -->|Tidak| P[Show Error Popup]
+        O -->|Ya| Q[Show Results]
+    end
+    
+    subgraph Results["📊 Results"]
+        Q --> R[Display Data Table]
+        R --> S{User Action}
+        S -->|Copy JSON| T[Copy to Clipboard]
+        S -->|Download| U[Download JSON]
+        S -->|Reset| A
+    end

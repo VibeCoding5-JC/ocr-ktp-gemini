@@ -1,0 +1,32 @@
+flowchart TD
+    A[📥 POST /api/extract-ktp] --> B[Multer Middleware]
+    B --> C{File Ada?}
+    
+    C -->|Tidak| D[400: No File Uploaded]
+    C -->|Ya| E{MIME Type Valid?}
+    
+    E -->|Tidak| F[400: Invalid File Type]
+    E -->|Ya| G{Size ≤ 5MB?}
+    
+    G -->|Tidak| H[400: File Too Large]
+    G -->|Ya| I[Process Image dengan Sharp]
+    
+    I --> J{Process OK?}
+    J -->|Error| K[500: Failed to Process]
+    
+    J -->|OK| L[Kirim ke Gemini Flash API]
+    L --> M{API Response OK?}
+    
+    M -->|Error| N{Jenis Error?}
+    N -->|API Key Invalid| O[500: Invalid API Key]
+    N -->|Network Error| P[500: Connection Failed]
+    N -->|Other| Q[500: Processing Failed]
+    
+    M -->|OK| R[Parse JSON Response]
+    R --> S{Parse OK?}
+    
+    S -->|Error| T[500: Failed to Parse]
+    S -->|OK| U{is_ktp = true?}
+    
+    U -->|Tidak| V[200: success=false, Bukan KTP]
+    U -->|Ya| W[200: success=true, Data KTP]

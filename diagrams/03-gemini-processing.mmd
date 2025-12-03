@@ -1,0 +1,30 @@
+flowchart TD
+    A[🖼️ Terima Image Buffer] --> B[Convert ke Base64]
+    B --> C[Siapkan Prompt OCR KTP]
+    C --> D[Kirim ke Gemini 2.0 Flash]
+    
+    D --> E{Gemini Analisis}
+    E --> F{Apakah Gambar KTP?}
+    
+    F -->|Tidak| G[Return: is_ktp = false]
+    G --> H[Sertakan Error Message]
+    
+    F -->|Ya| I[Ekstrak Data KTP]
+    I --> J[NIK]
+    I --> K[Nama]
+    I --> L[Tempat/Tgl Lahir]
+    I --> M[Jenis Kelamin]
+    I --> N[Alamat Lengkap]
+    I --> O[RT/RW]
+    I --> P[Kelurahan]
+    I --> Q[Kecamatan]
+    I --> R[Kabupaten/Kota]
+    I --> S[Provinsi]
+    I --> T[Agama]
+    I --> U[Status Perkawinan]
+    I --> V[Pekerjaan]
+    I --> W[Kewarganegaraan]
+    I --> X[Berlaku Hingga]
+    
+    J & K & L & M & N & O & P & Q & R & S & T & U & V & W & X --> Y[Gabung ke JSON]
+    Y --> Z[Return: is_ktp = true + Data]

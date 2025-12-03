@@ -1,0 +1,41 @@
+flowchart TD
+    A[🏠 User Buka Aplikasi] --> B[📄 Halaman Upload KTP]
+    B --> C{User Upload Gambar?}
+    C -->|Tidak| B
+    C -->|Ya| D[🖼️ Validasi File]
+    
+    D --> E{Format Valid?<br/>JPG/PNG/WebP}
+    E -->|Tidak| F[❌ Error: Format Salah]
+    F --> B
+    
+    E -->|Ya| G{Ukuran ≤ 5MB?}
+    G -->|Tidak| H[❌ Error: File Terlalu Besar]
+    H --> B
+    
+    G -->|Ya| I[✅ Tampilkan Preview]
+    I --> J{User Klik Ekstrak?}
+    J -->|Tidak| K{User Klik Reset?}
+    K -->|Ya| B
+    K -->|Tidak| J
+    
+    J -->|Ya| L[⏳ Loading: Proses OCR]
+    L --> M[🤖 Kirim ke Gemini API]
+    M --> N{Response OK?}
+    
+    N -->|Error| O[❌ Error Popup]
+    O --> B
+    
+    N -->|OK| P{Gambar adalah KTP?}
+    P -->|Tidak| Q[❌ Error: Bukan KTP]
+    Q --> B
+    
+    P -->|Ya| R[✅ Tampilkan Hasil Ekstraksi]
+    R --> S{User Action?}
+    
+    S -->|Salin JSON| T[📋 Copy ke Clipboard]
+    T --> S
+    
+    S -->|Download| U[💾 Download JSON File]
+    U --> S
+    
+    S -->|Upload Baru| B
